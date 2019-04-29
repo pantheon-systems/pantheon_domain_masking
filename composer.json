@@ -1,0 +1,24 @@
+{
+    "name": "drupal/pantheon_domain_masking",
+    "type": "drupal-module",
+    "description": "Domain masking middleware for Drupal 8",
+    "keywords": ["Drupal"],
+    "license": "GPL-2.0+",
+    "homepage": "https://www.drupal.org/project/pantheon_domain_masking",
+    "minimum-stability": "stable",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/pantheon_domain_masking",
+        "source": "http://cgit.drupalcode.org/pantheon_domain_masking"
+    },
+    "require": {},
+    "require-dev": {
+        "drupal/coder": "^8.3",
+        "squizlabs/php_codesniffer": "^3.4"
+    },
+    "scripts": {
+        "codesniff": [
+            "phpcs --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/Drupal src",
+            "phpcs --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/DrupalPractice src"
+        ]
+    }
+}

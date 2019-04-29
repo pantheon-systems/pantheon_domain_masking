@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains pantheon_domain_masking.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function pantheon_domain_masking_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the pantheon_domain_masking module.
+    case 'help.page.pantheon_domain_masking':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Support for domain masking on Pantheon sites') . '</p>';
+      return $output;
+
+    default:
+  }
+}

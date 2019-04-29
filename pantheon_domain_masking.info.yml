@@ -1,0 +1,5 @@
+name: 'Pantheon Domain Masking'
+type: module
+description: 'Support for domain masking on Pantheon sites'
+core: 8.x
+package: 'Pantheon'
