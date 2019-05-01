@@ -101,11 +101,10 @@ class DomainMaskingConfigForm extends ConfigFormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
-    // TODO: this actually fails if the user followed directions.
-    // $host = $this->validateHost($form_state->getValue('domain'));
-    // if ($host === FALSE) {
-    //   $form_state->setErrorByName('domain', $this->t('Invalid domain specified.'));
-    // }
+    $host = $this->validateHost($form_state->getValue('domain'));
+    if ($host === FALSE) {
+      $form_state->setErrorByName('domain', $this->t('Invalid domain specified.'));
+    }
   }
 
   /**
@@ -118,8 +117,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
     $host = $this->validateHost($form_state->getValue('domain'));
 
     $this->config('pantheon_domain_masking.settings')
-      // ->set('domain', $host)
-      ->set('domain', $form_state->getValue('domain'))
+      ->set('domain', $host)
       ->set('enabled', $form_state->getValue('enabled'))
       ->set('allow_platform', $form_state->getValue('allow_platform'))
       ->save();
@@ -135,6 +133,11 @@ class DomainMaskingConfigForm extends ConfigFormBase {
    *   The validated host if available, or FALSE if the input is invalid.
    */
   public function validateHost($userInput) {
+    // To make sure this works properly with parse_url, tack on a scheme.
+    if (\strpos($userInput, '://') === FALSE) {
+      $userInput = 'http://' . $userInput;
+    }
+
     $parsed = \parse_url($userInput);
     if (!isset($parsed['host'])) {
       return FALSE;
