@@ -142,7 +142,15 @@ class DomainMaskingConfigForm extends ConfigFormBase {
     if (!isset($parsed['host'])) {
       return FALSE;
     }
-    return $parsed['host'];
+
+    $return = $parsed['host'];
+
+    // Check if a port is included.
+    if (isset($parsed['port'])) {
+      $return .= ':' . $parsed['port'];
+    }
+
+    return $return;
   }
 
 }
