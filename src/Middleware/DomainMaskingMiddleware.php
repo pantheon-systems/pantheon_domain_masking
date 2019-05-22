@@ -62,6 +62,7 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
         }
 
         if ($mask === TRUE) {
+var_dump($domain); die;
           $domain = $config->get('domain');
           $request->headers->set('host', $domain);
         }
