@@ -77,6 +77,14 @@ class DomainMaskingConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('domain'),
     ];
 
+    $form['subpath'] = [
+      '#type' => 'textfield',
+      '#length' => 255,
+      '#title' => $this->t('Subpath (optional):'),
+      '#description' => $this->t('The path under the root ("/") for this site. Generally only used if this is the second website being masked on an interior path, eg. "masked.domain/blog".'),
+      '#default_value' => $config->get('subpath'),
+    ];
+
     $pantheonEnv = $_ENV['PANTHEON_ENVIRONMENT'] ?: '[env]';
     $pantheonSiteName = $_ENV['PANTHEON_SITE_NAME'] ?: '[site-name]';
     $form['allow_platform'] = [
@@ -118,6 +126,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
 
     $this->config('pantheon_domain_masking.settings')
       ->set('domain', $host)
+      ->set('subpath', $form_state->getValue('subpath', NULL))
       ->set('enabled', $form_state->getValue('enabled'))
       ->set('allow_platform', $form_state->getValue('allow_platform'))
       ->save();

@@ -1,3 +1,4 @@
 domain: "example.com"
 enabled: 'no'
 allow_platform: 'yes'
+subpath: ''
