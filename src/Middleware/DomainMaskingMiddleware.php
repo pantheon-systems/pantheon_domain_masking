@@ -63,6 +63,9 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
         // Disable page caching.
         \Drupal::service('page_cache_kill_switch')->trigger();
 
+        // Set a vary header before we read custom server vars.
+        header('Vary: adv-cdn-origin', FALSE);
+
         // If we're coming from a platform domain, and the user has chosen to
         // allow platform domains, don't mask.
         if ($this->isPlatformDomainRequest()) {
