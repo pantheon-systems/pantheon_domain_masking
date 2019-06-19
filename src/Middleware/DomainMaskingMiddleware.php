@@ -90,7 +90,9 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
             // Add the subpath back into the request.
             $newRequestArray = $request->server->all();
             $newRequestArray['SCRIPT_NAME'] = "/${subpath}" . $newRequestArray['SCRIPT_NAME'];
-            $newRequestArray['REQUEST_URI'] = "/${subpath}" . $newRequestArray['REQUEST_URI'];
+            // When using Apache's ProxyPass directive you might end up with
+            // double slashes, which might cause endless loops. Remove those.
+            $newRequestArray['REQUEST_URI'] = \str_replace('//', '/', "/${subpath}" . $newRequestArray['REQUEST_URI']);
             $newRequestArray['SCRIPT_FILENAME'] = \dirname($newRequestArray['SCRIPT_FILENAME']) . "/${subpath}/" . \basename($newRequestArray['SCRIPT_FILENAME']);
             $newRequestArray['HTTP_HOST'] = $host;
 
