@@ -60,9 +60,6 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
       if ($enabled === TRUE) {
         $mask = TRUE;
 
-        // Disable page caching.
-        \Drupal::service('page_cache_kill_switch')->trigger();
-
         // Set a vary header before we read custom server vars.
         header('Vary: adv-cdn-origin', FALSE);
 
