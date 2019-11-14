@@ -3,3 +3,4 @@ type: module
 description: 'Support for domain masking on Pantheon sites'
 core: 8.x
 package: 'Pantheon'
+configure: pantheon_domain_masking.domain_masking_config_form
