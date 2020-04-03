@@ -105,8 +105,8 @@ class DomainMaskingConfigForm extends ConfigFormBase {
     }
 
 
-    $pantheonEnv = $_ENV['PANTHEON_ENVIRONMENT'] ?: '[env]';
-    $pantheonSiteName = $_ENV['PANTHEON_SITE_NAME'] ?: '[site-name]';
+    $pantheonEnv = $_ENV['PANTHEON_ENVIRONMENT'] ?? '[env]';
+    $pantheonSiteName = $_ENV['PANTHEON_SITE_NAME'] ?? '[site-name]';
     $form['allow_platform'] = [
       '#type' => 'radios',
       '#title' => $this->t('Allow Platform domain access?'),
