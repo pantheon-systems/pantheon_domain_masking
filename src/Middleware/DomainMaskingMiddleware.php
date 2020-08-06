@@ -97,7 +97,7 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
             }
             // When using Apache's ProxyPass directive you might end up with
             // double slashes, which might cause endless loops. Remove those.
-            $newRequestArray['REQUEST_URI'] = \str_replace('//', '/', $newRequestArray['REQUEST_URI']);
+            $newRequestArray['REQUEST_URI'] = $this->stripExtraPathSlashes($newRequestArray['REQUEST_URI']);
             if (strpos($newRequestArray['SCRIPT_FILENAME'], "/${subpath}") === FALSE) {
               $newRequestArray['SCRIPT_FILENAME'] = \dirname($newRequestArray['SCRIPT_FILENAME']) . "/${subpath}/" . \basename($newRequestArray['SCRIPT_FILENAME']);
             }
@@ -142,6 +142,28 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
     else {
       return TRUE;
     }
+  }
+  
+  /**
+   * Cleans up extra slashes in the path
+   *
+   * @return string
+   */
+  protected function stripExtraPathSlashes(String $url) {
+    $parts = parse_url($url);
+    // Thanks: https://www.php.net/manual/en/function.parse-url.php#106731
+    $scheme   = isset($parts['scheme']) ? $parts['scheme'] . '://' : '';
+    $host     = $parts['host'] ?? '';
+    $port     = isset($parts['port']) ? ':' . $parts['port'] : '';
+    $user     = $parts['user'] ?? '';
+    $pass     = isset($parts['pass']) ? ':' . $parts['pass']  : '';
+    $pass     = ($user || $pass) ? "$pass@" : '';
+    $path     = $parts['path'] ?? '';
+    $query    = isset($parts['query']) ? '?' . $parts['query'] : '';
+    $fragment = isset($parts['fragment']) ? '#' . $parts['fragment'] : '';
+    // remove double slashes from the path
+    $path = \str_replace('//', '/', $path);
+    return "$scheme$user$pass$host$port$path$query$fragment";
   }
 
 }
