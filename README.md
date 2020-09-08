@@ -26,7 +26,20 @@ The module can be installed by downloading this module and placing directly in `
 
 Once the module has been installed to the filesystem, it can be enabled like any other contrib module. However, this will not enable the domain masking functionality. Once the module is active, the config page for the module (`/admin/config/pantheon-domain-masking/options`) will allow you to enter the public-facing domain name. You will need to toggle the `Enable domain masking?` field on this page to enable the middleware.
 
-Alternatively, you may configure the module in your `settings.php` file (or another file imported by `settings.php`)
+Alternatively, you may configure the module in your `settings.php` file (or another file imported by `settings.php`) by using Drupal's [Configuration Override System](https://www.drupal.org/docs/drupal-apis/configuration-api/configuration-override-system). Specify values in `settings.php` like this:
+
+```
+$config['pantheon_domain_masking.settings']['domain'] = 'foo.com';
+$config['pantheon_domain_masking.settings']['subpath'] = 'bar';
+```
+
+When you load [the configuration page](/admin/config/pantheon-domain-masking/options) you'll find that the options you set in `settings.php` appear in the form and that the form inputs are disabled.
+
+### Available Config Overrides
+
+* `domain`: The public facing domain.
+* `subpath`: The subpath for Drupal. DO NOT include the leading `/`.
+* `allow_platform`: Allow platform access.
 
 ### Example
 
