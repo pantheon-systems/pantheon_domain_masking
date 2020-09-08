@@ -22,7 +22,11 @@ The module can be installed by downloading this module and placing directly in `
 }
 ```
 
+## Enabling and Configuring the module
+
 Once the module has been installed to the filesystem, it can be enabled like any other contrib module. However, this will not enable the domain masking functionality. Once the module is active, the config page for the module (`/admin/config/pantheon-domain-masking/options`) will allow you to enter the public-facing domain name. You will need to toggle the `Enable domain masking?` field on this page to enable the middleware.
+
+Alternatively, you may configure the module in your `settings.php` file (or another file imported by `settings.php`)
 
 ### Example
 
