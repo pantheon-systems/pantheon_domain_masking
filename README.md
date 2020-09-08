@@ -4,7 +4,23 @@ This module allows domain masking in Drupal 8 for environments where Drupal is n
 
 Typically domain masking can be facilitated by adding a few lines to a `.htaccess` or `nginx.conf` file; however, if that method is unavailable, this module allows Drupal to be aware of changes to the host and to persist those changes when generating redirects.
 
-## Enabling the module
+## Installing the module
+
+The module can be installed by downloading this module and placing directly in `modules/contrib` (or wherever you have decided to store modules in your filesystem). You can also [install via composer](https://getcomposer.org/doc/05-repositories.md#loading-a-package-from-a-vcs-repository) by adding the following entries to your `composer.json`:
+
+```
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/pantheon-systems/pantheon_domain_masking"
+    }
+  ],
+  "require": {
+    "drupal/pantheon_domain_masking": "dev-master"
+  }
+}
+```
 
 Once the module has been installed to the filesystem, it can be enabled like any other contrib module. However, this will not enable the domain masking functionality. Once the module is active, the config page for the module (`/admin/config/pantheon-domain-masking/options`) will allow you to enter the public-facing domain name. You will need to toggle the `Enable domain masking?` field on this page to enable the middleware.
 
