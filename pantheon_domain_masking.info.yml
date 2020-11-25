@@ -1,6 +1,6 @@
 name: 'Pantheon Domain Masking'
 type: module
 description: 'Support for domain masking on Pantheon sites'
-core: 8.x
+core_version_requirement: ^8 || ^9
 package: 'Pantheon'
 configure: pantheon_domain_masking.domain_masking_config_form
