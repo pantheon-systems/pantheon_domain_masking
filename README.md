@@ -41,6 +41,21 @@ When you load [the configuration page](/admin/config/pantheon-domain-masking/opt
 * `subpath`: The subpath for Drupal. DO NOT include the leading `/`.
 * `allow_platform`: Allow platform access.
 
+### Cache Context
+
+If `allow_platform` is enabled, you will need add `site` in `renderer.config.required_cache_context` for cache variation.
+
+```
+  renderer.config:
+    # Renderer required cache contexts:
+    #
+    # The Renderer will automatically associate these cache contexts with every
+    # render array, hence varying every render array by these cache contexts.
+    #
+    # @default ['languages:language_interface', 'theme', 'user.permissions']
+    required_cache_contexts: ['site', 'languages:language_interface', 'theme', 'user.permissions']
+```
+
 ### Example
 
 Assume a site is running on Pantheon with a live environment address of `https://live-example.pantheonsite.io`. Assume the public-facing domain you wish to use is `https://www.example.com`. In this case, you would enter `www.example.com` in the `Public-facing domain:` field. Once the `Enable domain masking?` field is set to `Yes`, Drupal will use `www.example.com` in generating any internal redirects.
