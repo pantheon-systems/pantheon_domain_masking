@@ -43,7 +43,7 @@ When you load [the configuration page](/admin/config/pantheon-domain-masking/opt
 
 ### Cache Context
 
-If `allow_platform` is enabled, you will need add `site` in `renderer.config.required_cache_context` for cache variation.
+If `allow_platform` is enabled, you will need add `url.site` in `renderer.config.required_cache_context` to prevent cache primed in platformm domain to be served in public facing domain and vice versa.
 
 ```
   renderer.config:
@@ -53,7 +53,7 @@ If `allow_platform` is enabled, you will need add `site` in `renderer.config.req
     # render array, hence varying every render array by these cache contexts.
     #
     # @default ['languages:language_interface', 'theme', 'user.permissions']
-    required_cache_contexts: ['site', 'languages:language_interface', 'theme', 'user.permissions']
+    required_cache_contexts: ['url.site', 'languages:language_interface', 'theme', 'user.permissions']
 ```
 
 ### Example
