@@ -6,20 +6,10 @@ Typically domain masking can be facilitated by adding a few lines to a `.htacces
 
 ## Installing the module
 
-The module can be installed by downloading this module and placing directly in `modules/contrib` (or wherever you have decided to store modules in your filesystem). You can also [install via composer](https://getcomposer.org/doc/05-repositories.md#loading-a-package-from-a-vcs-repository) by adding the following entries to your `composer.json`:
+The module can be installed by downloading this module and placing directly in `modules/contrib` (or wherever you have decided to store modules in your filesystem). You can also [install via composer](https://getcomposer.org/doc/05-repositories.md#loading-a-package-from-a-vcs-repository) by running:
 
 ```
-{
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/pantheon-systems/pantheon_domain_masking"
-    }
-  ],
-  "require": {
-    "drupal/pantheon_domain_masking": "dev-master"
-  }
-}
+composer require pantheon-systems/pantheon_domain_masking
 ```
 
 ## Enabling and Configuring the module
