@@ -1,5 +1,5 @@
 {
-    "name": "drupal/pantheon_domain_masking",
+    "name": "pantheon-systems/pantheon_domain_masking",
     "type": "drupal-module",
     "description": "Domain masking middleware for Drupal 8",
     "keywords": ["Drupal"],
@@ -20,5 +20,10 @@
             "phpcs --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/Drupal src",
             "phpcs --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/DrupalPractice src"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }
