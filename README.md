@@ -1,5 +1,7 @@
 # Pantheon Domain Masking
 
+[![Unofficial](https://img.shields.io/badge/Pantheon-Unofficial-yellow?logo=pantheon&color=FFDC28)](https://pantheon.io/docs/oss-support-levels#unofficial)
+
 This module allows domain masking in Drupal 8 for environments where Drupal is not running under Apache, or where the hosting configuration is unavailable.
 
 Typically domain masking can be facilitated by adding a few lines to a `.htaccess` or `nginx.conf` file; however, if that method is unavailable, this module allows Drupal to be aware of changes to the host and to persist those changes when generating redirects.
