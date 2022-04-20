@@ -4,7 +4,7 @@ pantheon_domain_masking.admin_landing_page:
     _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
     _title: 'Pantheon Domain Masking Options'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'administer site configuration'
   options:
     _admin_route: TRUE
 
@@ -14,6 +14,6 @@ pantheon_domain_masking.domain_masking_config_form:
     _form: '\Drupal\pantheon_domain_masking\Form\DomainMaskingConfigForm'
     _title: 'Pantheon Domain Masking Options'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'administer site configuration'
   options:
     _admin_route: TRUE
