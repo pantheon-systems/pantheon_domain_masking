@@ -105,6 +105,39 @@ class DomainMaskingConfigForm extends ConfigFormBase {
     }
 
 
+// use this to determine platform access
+    $form['header'] = [
+      '#type' => 'textfield',
+      '#length' => 255,
+      '#title' => $this->t('Request Header'),
+      '#description' => $this->t('Request header used to determine if the request is on-platform or not.'),
+      '#default_value' => $configEditable->get('header'),
+    ];
+    // Check overrides.
+    if ($configEditable->get('header') !== $configOverridden->get('header')) {
+      $form['header']['#disabled'] = TRUE;
+      $form['header']['#description'] .= $this->t(' **This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
+      $form['header']['#default_value'] = $configOverridden->get('header');
+    }
+
+    $form['matchvalue'] = [
+      '#type' => 'textfield',
+      '#length' => 255,
+      '#title' => $this->t('Header Value'),
+      '#description' => $this->t('When the header above matches this value, the request will be considered masked and non-platform.'),
+      '#default_value' => $configEditable->get('matchvalue'),
+    ];
+    // Check overrides.
+    if ($configEditable->get('matchvalue') !== $configOverridden->get('matchvalue')) {
+      $form['matchvalue']['#disabled'] = TRUE;
+      $form['matchvalue']['#description'] .= $this->t(' **This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
+      $form['matchvalue']['#default_value'] = $configOverridden->get('matchvalue');
+    }
+
+
+
+
+
     $pantheonEnv = $_ENV['PANTHEON_ENVIRONMENT'] ?? '[env]';
     $pantheonSiteName = $_ENV['PANTHEON_SITE_NAME'] ?? '[site-name]';
     $form['allow_platform'] = [
@@ -155,6 +188,8 @@ class DomainMaskingConfigForm extends ConfigFormBase {
       ->set('subpath', $form_state->getValue('subpath', NULL))
       ->set('enabled', $form_state->getValue('enabled'))
       ->set('allow_platform', $form_state->getValue('allow_platform'))
+      ->set('header', $form_state->getValue('header'))
+      ->set('matchvalue', $form_state->getValue('matchvalue'))
       ->save();
   }
 

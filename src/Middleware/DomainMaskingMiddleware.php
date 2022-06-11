@@ -56,7 +56,6 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
 
       // First check to see if we're even enabled.
       $enabled = \filter_var($config->get('enabled', 'no'), FILTER_VALIDATE_BOOLEAN);
-
       if ($enabled === TRUE) {
         $mask = TRUE;
 
@@ -67,7 +66,7 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
         // allow platform domains, don't mask.
         if ($this->isPlatformDomainRequest()) {
           $allowPlatform = \filter_var($config->get('allow_platform', 'no'), FILTER_VALIDATE_BOOLEAN);
-          if ($allowPlatform === TRUE) {
+          if ($allowPlatform == TRUE) {
             $mask = FALSE;
           }
         }
@@ -130,9 +129,14 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
    * @return boolean
    */
   protected function isPlatformDomainRequest(Request $request = NULL) {
+    $config = $this->configFactory->get('pantheon_domain_masking.settings');
+
+    $headername = $config->get('header', 'adv-cdn-origin');
+    $headervalue = $config->get('matchvalue', '1');
     $targetReq = $request ?: $this->origRequest;
+
     if ($targetReq) {
-      if ($targetReq->headers->has('adv-cdn-origin') && $targetReq->headers->get('adv-cdn-origin', '0') == 1) {
+      if ($targetReq->headers->has($headername) && $targetReq->headers->get($headername, '0') == $headervalue) {
         return FALSE;
       }
       else {
