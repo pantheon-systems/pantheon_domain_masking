@@ -90,7 +90,7 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
             // Add the subpath back into the request, if not already present.
             $newRequestArray = $request->server->all();
             if (strpos($newRequestArray['SCRIPT_NAME'], "/${subpath}/") !== 0) {
-              $newRequestArray['SCRIPT_NAME'] = "/${subpath}" . $newRequestArray['SCRIPT_NAME'];
+              $newRequestArray['SCRIPT_NAME'] = "/${subpath}/" . $newRequestArray['SCRIPT_NAME'];
             }
             if (strpos($newRequestArray['REQUEST_URI'], "/${subpath}/") !== 0) {
               $newRequestArray['REQUEST_URI'] = "/${subpath}/" . $newRequestArray['REQUEST_URI'];
