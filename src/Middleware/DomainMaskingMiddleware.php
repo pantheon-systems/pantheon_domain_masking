@@ -12,8 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class DomainMaskingMiddleware implements HttpKernelInterface {
 
-  const DOMAIN_MASKING_MAIN_REQUEST = self::MAIN_REQUEST ?? self::MASTER_REQUEST;
-
   /**
    * The decorated kernel.
    *
@@ -51,7 +49,8 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
   /**
    * {@inheritdoc}
    */
-  public function handle(Request $request, $type = self::DOMAIN_MASKING_MAIN_REQUEST, $catch = TRUE): Response {
+  public function handle(Request $request, $type = 1, $catch = TRUE): Response {
+    // Type 1 is self::MAIN_REQUEST in newer versions of Symfony, self::MASTER_REQUEST in older.
     if (PHP_SAPI !== 'cli') {
       $config = $this->configFactory->get('pantheon_domain_masking.settings');
       $this->origRequest = clone $request;
