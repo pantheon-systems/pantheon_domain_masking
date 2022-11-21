@@ -5,6 +5,7 @@ namespace Drupal\pantheon_domain_masking\Middleware;
 use Drupal\Core\Config\ConfigFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class DomainMaskingMiddleware.
@@ -48,7 +49,8 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
   /**
    * {@inheritdoc}
    */
-  public function handle(Request $request, $type = self::MASTER_REQUEST, $catch = TRUE) {
+  public function handle(Request $request, $type = 1, $catch = TRUE): Response {
+    // Type 1 is self::MAIN_REQUEST in newer versions of Symfony, self::MASTER_REQUEST in older.
     if (PHP_SAPI !== 'cli') {
       $config = $this->configFactory->get('pantheon_domain_masking.settings');
       $this->origRequest = clone $request;
