@@ -51,7 +51,7 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
    * {@inheritdoc}
    */
   #[\ReturnTypeWillChange]
-  public function handle(Request $request, int $type = self::DOMAIN_MASKING_MAIN_REQUEST, bool $catch = TRUE) {
+  public function handle(Request $request, int $type = self::MAIN_REQUEST, bool $catch = TRUE) {
     if (PHP_SAPI !== 'cli') {
       $config = $this->configFactory->get('pantheon_domain_masking.settings');
       $this->origRequest = clone $request;
