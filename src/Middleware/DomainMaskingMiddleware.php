@@ -87,21 +87,21 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
           $subpath = $config->get('subpath', '');
           if (!empty($subpath)) {
             // More cookie jawn.
-            ini_set('session.cookie_path', "/${subpath}");
+            ini_set('session.cookie_path', "/{$subpath}");
 
             // Add the subpath back into the request, if not already present.
             $newRequestArray = $request->server->all();
-            if (strpos($newRequestArray['SCRIPT_NAME'], "/${subpath}/") !== 0) {
-              $newRequestArray['SCRIPT_NAME'] = "/${subpath}" . $newRequestArray['SCRIPT_NAME'];
+            if (strpos($newRequestArray['SCRIPT_NAME'], "/{$subpath}/") !== 0) {
+              $newRequestArray['SCRIPT_NAME'] = "/{$subpath}" . $newRequestArray['SCRIPT_NAME'];
             }
-            if (strpos($newRequestArray['REQUEST_URI'], "/${subpath}") !== 0) {
-              $newRequestArray['REQUEST_URI'] = "/${subpath}" . $newRequestArray['REQUEST_URI'];
+            if (strpos($newRequestArray['REQUEST_URI'], "/{$subpath}") !== 0) {
+              $newRequestArray['REQUEST_URI'] = "/{$subpath}" . $newRequestArray['REQUEST_URI'];
             }
             // When using Apache's ProxyPass directive you might end up with
             // double slashes, which might cause endless loops. Remove those.
             $newRequestArray['REQUEST_URI'] = $this->stripExtraPathSlashes($newRequestArray['REQUEST_URI']);
-            if (strpos($newRequestArray['SCRIPT_FILENAME'], "/${subpath}/") === FALSE) {
-              $newRequestArray['SCRIPT_FILENAME'] = \dirname($newRequestArray['SCRIPT_FILENAME']) . "/${subpath}/" . \basename($newRequestArray['SCRIPT_FILENAME']);
+            if (strpos($newRequestArray['SCRIPT_FILENAME'], "/{$subpath}/") === FALSE) {
+              $newRequestArray['SCRIPT_FILENAME'] = \dirname($newRequestArray['SCRIPT_FILENAME']) . "/{$subpath}/" . \basename($newRequestArray['SCRIPT_FILENAME']);
             }
             $newRequestArray['HTTP_HOST'] = $host;
             // Replace the request being used by this middleware.
@@ -114,8 +114,8 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
           if (isset($_SERVER['HTTP_USER_AGENT_HTTPS']) && $_SERVER['HTTP_USER_AGENT_HTTPS'] != 'ON') {
             $proto = 'http';
           }
-          $base_path = "/${subpath}";
-          $base_url = $base_root = "${proto}://${host}" . (empty($subpath) ? '' : "/${subpath}");
+          $base_path = "/{$subpath}";
+          $base_url = $base_root = "{$proto}://{$host}" . (empty($subpath) ? '' : "/{$subpath}");
           $GLOBALS['base_path'] = $base_path;
           $GLOBALS['base_url'] = $base_url;
           $GLOBALS['base_root'] = $base_root;
