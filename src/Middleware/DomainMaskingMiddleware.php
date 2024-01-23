@@ -87,8 +87,8 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
                   $proto = 'http';
                 }
                 $redirect_url = "{$proto}://" . $current_request['HTTP_HOST'] . $new_path;
-        				$redirect = new RedirectResponse($redirect_url);
-        				$redirect->send();
+                $redirect = new RedirectResponse($redirect_url);
+                $redirect->send();
               }
             }
           }
