@@ -71,6 +71,26 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
           $allowPlatform = \filter_var($config->get('allow_platform', 'no'), FILTER_VALIDATE_BOOLEAN);
           if ($allowPlatform === TRUE) {
             $mask = FALSE;
+
+            $subpath = $config->get('subpath', '');            
+            if (!empty($subpath)) {
+              
+              $current_request = $request->server->all();
+              
+              // Check if subpath is found on the URL
+              if (strpos($current_request['REQUEST_URI'], $subpath) > 0) {
+                // If subpath is found, remove it from the URL via Redirect
+                $new_path =  str_replace( "/{$subpath}", "", $current_request['REQUEST_URI']);
+
+        				$proto = 'https';
+        				if (isset($_SERVER['HTTP_USER_AGENT_HTTPS']) && $_SERVER['HTTP_USER_AGENT_HTTPS'] != 'ON') {
+                  $proto = 'http';
+                }
+                $redirect_url = "{$proto}://" . $current_request['HTTP_HOST'] . $new_path;
+        				$redirect = new RedirectResponse($redirect_url);
+        				$redirect->send();
+              }
+            }
           }
         }
 
