@@ -57,7 +57,7 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
       $host = $this->origRequest->headers->get('host');
 
       // First check to see if we're even enabled.
-      $enabled = \filter_var($config->get('enabled', 'no'), FILTER_VALIDATE_BOOLEAN);
+      $enabled = \filter_var($config->get('enabled'), FILTER_VALIDATE_BOOLEAN);
 
       if ($enabled === TRUE) {
         $mask = TRUE;
@@ -68,7 +68,7 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
         // If we're coming from a platform domain, and the user has chosen to
         // allow platform domains, don't mask.
         if ($this->isPlatformDomainRequest()) {
-          $allowPlatform = \filter_var($config->get('allow_platform', 'no'), FILTER_VALIDATE_BOOLEAN);
+          $allowPlatform = \filter_var($config->get('allow_platform'), FILTER_VALIDATE_BOOLEAN);
           if ($allowPlatform === TRUE) {
             $mask = FALSE;
           }
@@ -84,24 +84,24 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
           $host = $domain;
 
           // Can't do subpaths without domain masking.
-          $subpath = $config->get('subpath', '');
+          $subpath = $config->get('subpath');
           if (!empty($subpath)) {
             // More cookie jawn.
             ini_set('session.cookie_path', "/{$subpath}");
 
             // Add the subpath back into the request, if not already present.
             $newRequestArray = $request->server->all();
-            if (strpos($newRequestArray['SCRIPT_NAME'], "/{$subpath}/") !== 0) {
+            if (!str_starts_with((string) $newRequestArray['SCRIPT_NAME'], "/{$subpath}/")) {
               $newRequestArray['SCRIPT_NAME'] = "/{$subpath}" . $newRequestArray['SCRIPT_NAME'];
             }
-            if (strpos($newRequestArray['REQUEST_URI'], "/{$subpath}") !== 0) {
+            if (!str_starts_with((string) $newRequestArray['REQUEST_URI'], "/{$subpath}")) {
               $newRequestArray['REQUEST_URI'] = "/{$subpath}" . $newRequestArray['REQUEST_URI'];
             }
             // When using Apache's ProxyPass directive you might end up with
             // double slashes, which might cause endless loops. Remove those.
             $newRequestArray['REQUEST_URI'] = $this->stripExtraPathSlashes($newRequestArray['REQUEST_URI']);
-            if (strpos($newRequestArray['SCRIPT_FILENAME'], "/{$subpath}/") === FALSE) {
-              $newRequestArray['SCRIPT_FILENAME'] = \dirname($newRequestArray['SCRIPT_FILENAME']) . "/{$subpath}/" . \basename($newRequestArray['SCRIPT_FILENAME']);
+            if (!str_contains((string) $newRequestArray['SCRIPT_FILENAME'], "/{$subpath}/")) {
+              $newRequestArray['SCRIPT_FILENAME'] = \dirname((string) $newRequestArray['SCRIPT_FILENAME']) . "/{$subpath}/" . \basename((string) $newRequestArray['SCRIPT_FILENAME']);
             }
             $newRequestArray['HTTP_HOST'] = $host;
             // Replace the request being used by this middleware.
