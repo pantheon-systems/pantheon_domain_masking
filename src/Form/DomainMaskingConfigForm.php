@@ -30,6 +30,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  #[\Override]
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory')
@@ -55,6 +56,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  #[\Override]
   public function buildForm(array $form, FormStateInterface $form_state) {
     $configEditable = $this->config('pantheon_domain_masking.settings');
     $configOverridden = $this->configFactory->get('pantheon_domain_masking.settings');
@@ -132,6 +134,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  #[\Override]
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
@@ -144,6 +147,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  #[\Override]
   public function submitForm(array &$form, FormStateInterface $form_state) {
     parent::submitForm($form, $form_state);
 
@@ -169,7 +173,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
    */
   public function validateHost($userInput) {
     // To make sure this works properly with parse_url, tack on a scheme.
-    if (\strpos($userInput, '://') === FALSE) {
+    if (!str_contains($userInput, '://')) {
       $userInput = 'http://' . $userInput;
     }
 
