@@ -5,6 +5,7 @@ namespace Drupal\pantheon_domain_masking\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -22,9 +23,10 @@ class DomainMaskingConfigForm extends ConfigFormBase {
   /**
    * Constructs a new DomainMaskingConfigForm object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory,TypedConfigManagerInterface $typed_config) {
+    parent::__construct($config_factory,$typed_config);
     $this->configFactory = $config_factory;
+    $this->typedConfigManager = $typed_config;
   }
 
   /**
@@ -33,7 +35,8 @@ class DomainMaskingConfigForm extends ConfigFormBase {
   #[\Override]
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('config.typed'),
     );
   }
 

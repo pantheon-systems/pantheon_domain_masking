@@ -131,7 +131,7 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
    *
    * @return boolean
    */
-  protected function isPlatformDomainRequest(Request $request = NULL) {
+  protected function isPlatformDomainRequest(?Request $request = NULL) {
     $targetReq = $request ?: $this->origRequest;
     if ($targetReq) {
       if ($targetReq->headers->has('adv-cdn-origin') && $targetReq->headers->get('adv-cdn-origin', '0') == 1) {
