@@ -26,7 +26,6 @@ class DomainMaskingConfigForm extends ConfigFormBase {
   public function __construct(ConfigFactoryInterface $config_factory,TypedConfigManagerInterface $typed_config) {
     parent::__construct($config_factory,$typed_config);
     $this->configFactory = $config_factory;
-    $this->typedConfigManager = $typed_config;
   }
 
   /**
