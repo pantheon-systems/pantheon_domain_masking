@@ -23,8 +23,8 @@ class DomainMaskingConfigForm extends ConfigFormBase {
   /**
    * Constructs a new DomainMaskingConfigForm object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory,TypedConfigManagerInterface $typed_config) {
-    parent::__construct($config_factory,$typed_config);
+  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typed_config) {
+    parent::__construct($config_factory, $typed_config);
     $this->configFactory = $config_factory;
   }
 
