@@ -10,6 +10,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class DomainMaskingConfigForm.
+ *
+ * Provides a configuration form for the Domain Masking module.
  */
 class DomainMaskingConfigForm extends ConfigFormBase {
 
@@ -76,7 +78,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
     // Check overrides.
     if ($configEditable->get('enabled') !== $configOverridden->get('enabled')) {
       $form['enabled']['#disabled'] = TRUE;
-      $form['enabled']['#description'] .= $this->t(' **This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
+      $form['enabled']['#description'] .= $this->t('**This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
       $form['enabled']['#default_value'] = $configOverridden->get('enabled');
     }
 
@@ -90,7 +92,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
     // Check overrides.
     if ($configEditable->get('domain') !== $configOverridden->get('domain')) {
       $form['domain']['#disabled'] = TRUE;
-      $form['domain']['#description'] .= $this->t(' **This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
+      $form['domain']['#description'] .= $this->t('**This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
       $form['domain']['#default_value'] = $configOverridden->get('domain');
     }
 
@@ -104,10 +106,9 @@ class DomainMaskingConfigForm extends ConfigFormBase {
     // Check overrides.
     if ($configEditable->get('subpath') !== $configOverridden->get('subpath')) {
       $form['subpath']['#disabled'] = TRUE;
-      $form['subpath']['#description'] .= $this->t(' **This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
+      $form['subpath']['#description'] .= $this->t('**This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
       $form['subpath']['#default_value'] = $configOverridden->get('subpath');
     }
-
 
     $pantheonEnv = $_ENV['PANTHEON_ENVIRONMENT'] ?? '[env]';
     $pantheonSiteName = $_ENV['PANTHEON_SITE_NAME'] ?? '[site-name]';
@@ -126,7 +127,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
     // Check overrides.
     if ($configEditable->get('allow_platform') !== $configOverridden->get('allow_platform')) {
       $form['allow_platform']['#disabled'] = TRUE;
-      $form['allow_platform']['#description'] .= $this->t(' **This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
+      $form['allow_platform']['#description'] .= $this->t('**This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
       $form['allow_platform']['#default_value'] = $configOverridden->get('allow_platform');
     }
 

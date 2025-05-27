@@ -6,6 +6,9 @@ use Drupal\Core\Config\ConfigFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Class DomainMaskingConfigForm.
+ */
 class Helper {
 
   /**
@@ -43,7 +46,8 @@ class Helper {
   /**
    * Determine whether the request is coming from a platform domain.
    *
-   * @return boolean
+   * @return bool
+   *   TRUE if the request is from a platform domain; FALSE otherwise.
    */
   public function isPlatformDomainRequest() {
     $req = $this->requestStack->getCurrentRequest();
@@ -58,7 +62,8 @@ class Helper {
   /**
    * Should the masking be enabled for this request?
    *
-   * @return boolean
+   * @return bool
+   *   TRUE if masking should be applied; FALSE otherwise.
    */
   public function shouldMask() {
     $config = $this->configFactory->get('pantheon_domain_masking.settings');
@@ -80,7 +85,8 @@ class Helper {
   /**
    * Is there a subpath in the config?
    *
-   * @return boolean
+   * @return bool
+   *   TRUE if a subpath value is present in the configuration; FALSE otherwise.
    */
   public function hasSubpath() {
     return !empty($this->configFactory->get('subpath'));
