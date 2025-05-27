@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class DomainMaskingMiddleware.
+ *
+ * Middleware to apply domain masking in a Drupal site.
+ *
+ * This middleware modifies request headers and server parameters to mask the
+ * platform domain with a configured custom domain.
  */
 class DomainMaskingMiddleware implements HttpKernelInterface {
 
@@ -29,7 +34,7 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
   /**
    * The original request when this middleware was first run.
    *
-   * @var \Symfony\Component\HttpFoundation\Request;
+   * @var \Symfony\Component\HttpFoundation\Request
    */
   protected $origRequest;
 
@@ -50,7 +55,8 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
    * {@inheritdoc}
    */
   public function handle(Request $request, $type = 1, $catch = TRUE): Response {
-    // Type 1 is self::MAIN_REQUEST in newer versions of Symfony, self::MASTER_REQUEST in older.
+    // Type 1 is self::MAIN_REQUEST in newer Symfony versions,
+    // self::MASTER_REQUEST in older ones.
     if (PHP_SAPI !== 'cli') {
       $config = $this->configFactory->get('pantheon_domain_masking.settings');
       $this->origRequest = clone $request;
@@ -129,9 +135,10 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
   /**
    * Determines whether or not the original request was to a platform domain.
    *
-   * @return boolean
+   * @return bool
+   *   TRUE if the request is to a platform domain, FALSE otherwise.
    */
-  protected function isPlatformDomainRequest(Request $request = NULL) {
+  protected function isPlatformDomainRequest(?Request $request = NULL) {
     $targetReq = $request ?: $this->origRequest;
     if ($targetReq) {
       if ($targetReq->headers->has('adv-cdn-origin') && $targetReq->headers->get('adv-cdn-origin', '0') == 1) {
@@ -145,11 +152,12 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
       return TRUE;
     }
   }
-  
+
   /**
-   * Cleans up extra slashes in the path
+   * Cleans up extra slashes in the path.
    *
    * @return string
+   *   The URL after removing extra slashes from its path.
    */
   protected function stripExtraPathSlashes(String $url) {
     $parts = parse_url($url);
@@ -158,12 +166,12 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
     $host     = $parts['host'] ?? '';
     $port     = isset($parts['port']) ? ':' . $parts['port'] : '';
     $user     = $parts['user'] ?? '';
-    $pass     = isset($parts['pass']) ? ':' . $parts['pass']  : '';
+    $pass     = isset($parts['pass']) ? ':' . $parts['pass'] : '';
     $pass     = ($user || $pass) ? "$pass@" : '';
     $path     = $parts['path'] ?? '';
     $query    = isset($parts['query']) ? '?' . $parts['query'] : '';
     $fragment = isset($parts['fragment']) ? '#' . $parts['fragment'] : '';
-    // remove double slashes from the path
+    // Remove double slashes from the path.
     $path = \str_replace('//', '/', $path);
     return "$scheme$user$pass$host$port$path$query$fragment";
   }
