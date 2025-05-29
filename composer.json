@@ -19,6 +19,10 @@
         "codesniff": [
             "phpcs --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/Drupal src",
             "phpcs --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/DrupalPractice src"
+        ],
+        "code:fix": [
+            "phpcbf --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/Drupal src",
+            "phpcbf --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/DrupalPractice src"
         ]
     },
     "config": {

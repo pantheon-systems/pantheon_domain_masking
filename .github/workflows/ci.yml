@@ -38,3 +38,5 @@ jobs:
         run: composer install
       - name: Code sniff
         run: composer run-script codesniff
+      - name: Code fix
+        run: composer run-script code:fix
