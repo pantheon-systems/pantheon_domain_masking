@@ -24,6 +24,14 @@ class DomainMaskingConfigForm extends ConfigFormBase {
 
   /**
    * Constructs a new DomainMaskingConfigForm object.
+   *
+   * Note:
+   * From Drupal 10.2+, ConfigFormBase::__construct() accepts an optional
+   * TypedConfigManagerInterface argument. This argument is required as of Drupal 11.
+   * In Drupal 9, ConfigFormBase::__construct() accepts only a single argument:
+   * ConfigFactoryInterface.
+   *
+   * @see https://www.drupal.org/node/3404140
    */
   public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typed_config) {
     parent::__construct($config_factory, $typed_config);
