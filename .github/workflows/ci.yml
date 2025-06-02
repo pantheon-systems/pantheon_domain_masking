@@ -4,31 +4,23 @@ on:
 
 jobs:
   linting:
-    runs-on: ubuntu-latest
-    container:
-      image: quay.io/pantheon-public/build-tools-ci:8.x-php8.1
-      options: --user root
     name: Code linting
-    env:
-      TZ: "/usr/share/zoneinfo/America/Los_Angeles"
-      TERM: dumb
-      TERMINUS_TOKEN: ${{ secrets.TERMINUS_TOKEN }}
-      TERMINUS_SITE: ${{ secrets.TERMINUS_SITE }}
-      TERMINUS_ORG: ${{ secrets.TERMINUS_ORG }}
-      GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
-      GITHUB_RUN_NUMBER: ${{ github.run_number }}
-      COMMIT_SHA: ${{ github.sha }}
-      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      SANDBOX_SSH_KEY: ${{ secrets.SANDBOX_SSH_KEY }}
-      BASH_ENV: ~/.bashrc
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
       - name: Composer install
         run: composer install
+
       - name: Code sniff
         run: composer run-script codesniff
-      - name: Code fix
-        run: composer run-script code:fix
+
       - name: Code lint
         run: composer run-script code:lint
