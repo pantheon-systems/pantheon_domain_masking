@@ -1,7 +1,7 @@
 {
     "name": "pantheon-systems/pantheon_domain_masking",
     "type": "drupal-module",
-    "description": "Domain masking middleware for Drupal 8",
+    "description": "Domain masking middleware for Drupal",
     "keywords": ["Drupal"],
     "license": "GPL-2.0+",
     "homepage": "https://www.drupal.org/project/pantheon_domain_masking",
@@ -19,7 +19,12 @@
         "codesniff": [
             "phpcs --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/Drupal src",
             "phpcs --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/DrupalPractice src"
-        ]
+        ],
+        "code:fix": [
+            "phpcbf --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/Drupal src",
+            "phpcbf --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/DrupalPractice src"
+        ],
+        "code:lint": "find src -name '*.php' -print0 | xargs -0 -n1 php -l"
     },
     "config": {
         "allow-plugins": {

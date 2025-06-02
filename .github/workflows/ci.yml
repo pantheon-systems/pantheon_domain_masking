@@ -3,13 +3,24 @@ on:
   push:
 
 jobs:
-  phpcompatibility:
+  linting:
+    name: Code linting
     runs-on: ubuntu-latest
-    name: PHP Compatibility
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: PHPCompatibility
-        uses: pantheon-systems/phpcompatibility-action@v1
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          test-versions: 7.4-
+          php-version: '8.3'
+
+      - name: Composer install
+        run: composer install
+
+      - name: Code sniff
+        run: composer run-script codesniff
+
+      - name: Code lint
+        run: composer run-script code:lint

@@ -5,10 +5,13 @@ namespace Drupal\pantheon_domain_masking\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class DomainMaskingConfigForm.
+ *
+ * Provides a configuration form for the Domain Masking module.
  */
 class DomainMaskingConfigForm extends ConfigFormBase {
 
@@ -21,18 +24,29 @@ class DomainMaskingConfigForm extends ConfigFormBase {
 
   /**
    * Constructs a new DomainMaskingConfigForm object.
+   *
+   * Note:
+   * From Drupal 10.2+, ConfigFormBase::__construct() accepts an optional
+   * TypedConfigManagerInterface argument. This argument is required as of
+   * Drupal 11.
+   * In Drupal 9, ConfigFormBase::__construct() accepts only a single argument:
+   * ConfigFactoryInterface.
+   *
+   * @see https://www.drupal.org/node/3404140
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typed_config) {
+    parent::__construct($config_factory, $typed_config);
     $this->configFactory = $config_factory;
   }
 
   /**
    * {@inheritdoc}
    */
+  #[\Override]
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('config.typed'),
     );
   }
 
@@ -55,6 +69,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  #[\Override]
   public function buildForm(array $form, FormStateInterface $form_state) {
     $configEditable = $this->config('pantheon_domain_masking.settings');
     $configOverridden = $this->configFactory->get('pantheon_domain_masking.settings');
@@ -72,7 +87,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
     // Check overrides.
     if ($configEditable->get('enabled') !== $configOverridden->get('enabled')) {
       $form['enabled']['#disabled'] = TRUE;
-      $form['enabled']['#description'] .= $this->t(' **This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
+      $form['enabled']['#description'] .= $this->t('**This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
       $form['enabled']['#default_value'] = $configOverridden->get('enabled');
     }
 
@@ -86,7 +101,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
     // Check overrides.
     if ($configEditable->get('domain') !== $configOverridden->get('domain')) {
       $form['domain']['#disabled'] = TRUE;
-      $form['domain']['#description'] .= $this->t(' **This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
+      $form['domain']['#description'] .= $this->t('**This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
       $form['domain']['#default_value'] = $configOverridden->get('domain');
     }
 
@@ -100,10 +115,9 @@ class DomainMaskingConfigForm extends ConfigFormBase {
     // Check overrides.
     if ($configEditable->get('subpath') !== $configOverridden->get('subpath')) {
       $form['subpath']['#disabled'] = TRUE;
-      $form['subpath']['#description'] .= $this->t(' **This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
+      $form['subpath']['#description'] .= $this->t('**This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
       $form['subpath']['#default_value'] = $configOverridden->get('subpath');
     }
-
 
     $pantheonEnv = $_ENV['PANTHEON_ENVIRONMENT'] ?? '[env]';
     $pantheonSiteName = $_ENV['PANTHEON_SITE_NAME'] ?? '[site-name]';
@@ -122,7 +136,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
     // Check overrides.
     if ($configEditable->get('allow_platform') !== $configOverridden->get('allow_platform')) {
       $form['allow_platform']['#disabled'] = TRUE;
-      $form['allow_platform']['#description'] .= $this->t(' **This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
+      $form['allow_platform']['#description'] .= $this->t('**This config value has been overridden in code and cannot be changed here. The value that is shown is the actual value in use.**');
       $form['allow_platform']['#default_value'] = $configOverridden->get('allow_platform');
     }
 
@@ -132,6 +146,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  #[\Override]
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
@@ -144,6 +159,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  #[\Override]
   public function submitForm(array &$form, FormStateInterface $form_state) {
     parent::submitForm($form, $form_state);
 
@@ -169,7 +185,7 @@ class DomainMaskingConfigForm extends ConfigFormBase {
    */
   public function validateHost($userInput) {
     // To make sure this works properly with parse_url, tack on a scheme.
-    if (\strpos($userInput, '://') === FALSE) {
+    if (!str_contains($userInput, '://')) {
       $userInput = 'http://' . $userInput;
     }
 
