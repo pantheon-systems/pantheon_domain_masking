@@ -4,11 +4,12 @@
     "description": "Domain masking middleware for Drupal",
     "keywords": ["Drupal"],
     "license": "GPL-2.0+",
-    "homepage": "https://www.drupal.org/project/pantheon_domain_masking",
+    "version": "2.1.1",
+    "homepage": "https://github.com/pantheon-systems/pantheon_domain_masking",
     "minimum-stability": "stable",
     "support": {
-        "issues": "https://www.drupal.org/project/issues/pantheon_domain_masking",
-        "source": "http://cgit.drupalcode.org/pantheon_domain_masking"
+        "issues": "https://github.com/pantheon-systems/pantheon_domain_masking/issues",
+        "source": "https://github.com/pantheon-systems/pantheon_domain_masking"
     },
     "require": {},
     "require-dev": {
