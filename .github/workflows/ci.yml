@@ -1,6 +1,8 @@
 name: Pantheon Domain Masking
 on:
   push:
+permissions:
+  contents: read
 
 jobs:
   linting:
