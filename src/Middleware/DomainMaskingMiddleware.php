@@ -88,8 +88,14 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
 
           // Can't do subpaths without domain masking.
           $subpath = $config->get('subpath');
-          if (!empty($subpath)) {
-            // More cookie jawn.
+          $multilingual = \filter_var($config->get('multilingual'), FILTER_VALIDATE_BOOLEAN);
+
+          if (!empty($subpath) && !$multilingual) {
+            // Standard (non-multilingual) subpath handling: modify server
+            // variables so Symfony's Request derives the correct base path.
+            // When multilingual mode is enabled, SubpathPathProcessor handles
+            // subpath stripping/adding instead, to properly coordinate with
+            // Drupal's language path prefix negotiation.
             ini_set('session.cookie_path', "/{$subpath}");
 
             // Add the subpath back into the request, if not already present.
@@ -117,8 +123,16 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
           if (isset($_SERVER['HTTP_USER_AGENT_HTTPS']) && $_SERVER['HTTP_USER_AGENT_HTTPS'] != 'ON') {
             $proto = 'http';
           }
-          $base_path = "/{$subpath}";
-          $base_url = $base_root = "{$proto}://{$host}" . (empty($subpath) ? '' : "/{$subpath}");
+          if ($multilingual) {
+            // In multilingual mode, SubpathPathProcessor handles the subpath
+            // in the path processing pipeline. Base path stays at root.
+            $base_path = '/';
+            $base_url = $base_root = "{$proto}://{$host}";
+          }
+          else {
+            $base_path = "/{$subpath}";
+            $base_url = $base_root = "{$proto}://{$host}" . (empty($subpath) ? '' : "/{$subpath}");
+          }
           $GLOBALS['base_path'] = $base_path;
           $GLOBALS['base_url'] = $base_url;
           $GLOBALS['base_root'] = $base_root;

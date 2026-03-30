@@ -4,6 +4,14 @@ services:
     arguments: ['@config.factory']
     tags:
       - { name: http_middleware, priority: 400 }
+  pantheon_domain_masking.subpath_path_processor:
+    class: Drupal\pantheon_domain_masking\PathProcessor\SubpathPathProcessor
+    arguments: ['@config.factory']
+    tags:
+      # Inbound: strip subpath before language processor (language runs at 300).
+      - { name: path_processor_inbound, priority: 400 }
+      # Outbound: add subpath after language processor (language runs at 100).
+      - { name: path_processor_outbound, priority: 50 }
   pantheon_domain_masking.helper:
     class: Drupal\pantheon_domain_masking\Helper
     arguments: ['@config.factory', '@request_stack']
