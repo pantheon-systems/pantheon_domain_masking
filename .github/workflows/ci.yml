@@ -1,0 +1,39 @@
+name: Pantheon Domain Masking
+on:
+  push:
+permissions:
+  contents: read
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ["8.1", "8.5"]
+    name: Code linting (PHP ${{ matrix.php-version }})
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@ec406be512d7077f68eed36e63f4d91bc006edc4 # 2.35.4
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - name: Composer install
+        run: composer install --ignore-platform-reqs
+
+      - name: Code sniff
+        run: composer run-script codesniff
+
+      - name: Code lint
+        run: composer run-script code:lint
+
+  phpcompatibility:
+    runs-on: ubuntu-latest
+    name: PHP Compatibility
+    steps:
+      - name: PHPCompatibility
+        uses: pantheon-systems/phpcompatibility-action@44be5a8381691b9a209404a3f45df8254f1ce08f # v1.1.2
+        with:
+          test-versions: 8.1-

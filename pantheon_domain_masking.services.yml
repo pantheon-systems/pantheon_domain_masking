@@ -1,0 +1,9 @@
+services:
+  pantheon_domain_masking.middleware:
+    class: Drupal\pantheon_domain_masking\Middleware\DomainMaskingMiddleware
+    arguments: ['@config.factory']
+    tags:
+      - { name: http_middleware, priority: 400 }
+  pantheon_domain_masking.helper:
+    class: Drupal\pantheon_domain_masking\Helper
+    arguments: ['@config.factory', '@request_stack']

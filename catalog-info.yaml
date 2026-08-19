@@ -1,0 +1,12 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: pantheon_domain_masking
+  description: Domain Masking helper module for D8+
+  annotations:
+    github.com/project-slug: pantheon-systems/pantheon_domain_masking
+spec:
+  type: service
+  lifecycle: production
+  owner: implementation-team

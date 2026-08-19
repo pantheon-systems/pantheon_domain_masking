@@ -1,0 +1,13 @@
+pantheon_domain_masking.admin_landing_page:
+  route_name: pantheon_domain_masking.admin_landing_page
+  parent: system.admin_config
+  title: 'Pantheon Domain Masking Options'
+  description: 'Configure the Pantheon Domain Masking module'
+  weight: 100
+
+pantheon_domain_masking.domain_masking_config_form:
+  title: 'Options'
+  route_name: pantheon_domain_masking.domain_masking_config_form
+  description: 'Options for Domain Masking module'
+  parent: pantheon_domain_masking.admin_landing_page
+  weight: 0

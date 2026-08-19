@@ -1,0 +1,37 @@
+{
+    "name": "pantheon-systems/pantheon_domain_masking",
+    "type": "drupal-module",
+    "description": "Domain masking middleware for Drupal",
+    "keywords": ["Drupal"],
+    "license": "GPL-2.0+",
+    "version": "2.1.1",
+    "homepage": "https://github.com/pantheon-systems/pantheon_domain_masking",
+    "minimum-stability": "stable",
+    "support": {
+        "issues": "https://github.com/pantheon-systems/pantheon_domain_masking/issues",
+        "source": "https://github.com/pantheon-systems/pantheon_domain_masking"
+    },
+    "require": {
+        "php": ">=8.1"
+    },
+    "require-dev": {
+        "drupal/coder": "^8.3",
+        "squizlabs/php_codesniffer": "^3.4"
+    },
+    "scripts": {
+        "codesniff": [
+            "phpcs --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/Drupal src",
+            "phpcs --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/DrupalPractice src"
+        ],
+        "code:fix": [
+            "phpcbf --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/Drupal src",
+            "phpcbf --report=full --extensions=php,module,inc,theme,info,install --standard=vendor/drupal/coder/coder_sniffer/DrupalPractice src"
+        ],
+        "code:lint": "find src -name '*.php' -print0 | xargs -0 -n1 php -l"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}
