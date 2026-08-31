@@ -97,12 +97,29 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
             if (!str_starts_with((string) $newRequestArray['SCRIPT_NAME'], "/{$subpath}/")) {
               $newRequestArray['SCRIPT_NAME'] = "/{$subpath}" . $newRequestArray['SCRIPT_NAME'];
             }
-            if (!str_starts_with((string) $newRequestArray['REQUEST_URI'], "/{$subpath}")) {
+            if (
+              !str_starts_with((string) $newRequestArray['REQUEST_URI'], "/{$subpath}/") &&
+              $newRequestArray['REQUEST_URI'] !== "/{$subpath}"
+            ) {
               $newRequestArray['REQUEST_URI'] = "/{$subpath}" . $newRequestArray['REQUEST_URI'];
             }
             // When using Apache's ProxyPass directive you might end up with
             // double slashes, which might cause endless loops. Remove those.
             $newRequestArray['REQUEST_URI'] = $this->stripExtraPathSlashes($newRequestArray['REQUEST_URI']);
+            // Align PATH_INFO with subpath to ensure correct URL generation.
+            if (isset($newRequestArray['PATH_INFO'])) {
+              if (strpos($newRequestArray['PATH_INFO'], "/{$subpath}") !== 0) {
+                $newRequestArray['PATH_INFO'] = "/{$subpath}" . $newRequestArray['PATH_INFO'];
+              }
+            }
+            else {
+              // Create PATH_INFO from REQUEST_URI if missing.
+              $path = parse_url($newRequestArray['REQUEST_URI'], PHP_URL_PATH);
+              if ($path && strpos($path, "/{$subpath}") !== 0) {
+                $newRequestArray['PATH_INFO'] = "/{$subpath}" . $path;
+              }
+            }
+            // End of PATH_INFO alignment.
             if (!str_contains((string) $newRequestArray['SCRIPT_FILENAME'], "/{$subpath}/")) {
               $newRequestArray['SCRIPT_FILENAME'] = \dirname((string) $newRequestArray['SCRIPT_FILENAME']) . "/{$subpath}/" . \basename((string) $newRequestArray['SCRIPT_FILENAME']);
             }
