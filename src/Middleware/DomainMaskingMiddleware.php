@@ -97,7 +97,10 @@ class DomainMaskingMiddleware implements HttpKernelInterface {
             if (!str_starts_with((string) $newRequestArray['SCRIPT_NAME'], "/{$subpath}/")) {
               $newRequestArray['SCRIPT_NAME'] = "/{$subpath}" . $newRequestArray['SCRIPT_NAME'];
             }
-            if (!str_starts_with((string) $newRequestArray['REQUEST_URI'], "/{$subpath}")) {
+            if (
+              !str_starts_with((string) $newRequestArray['REQUEST_URI'], "/{$subpath}/") &&
+              $newRequestArray['REQUEST_URI'] !== "/{$subpath}"
+            ) {
               $newRequestArray['REQUEST_URI'] = "/{$subpath}" . $newRequestArray['REQUEST_URI'];
             }
             // When using Apache's ProxyPass directive you might end up with

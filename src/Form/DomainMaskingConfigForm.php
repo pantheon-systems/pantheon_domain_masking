@@ -12,6 +12,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Class DomainMaskingConfigForm.
  *
  * Provides a configuration form for the Domain Masking module.
+ *
+ * @phpstan-consistent-constructor
  */
 class DomainMaskingConfigForm extends ConfigFormBase {
 

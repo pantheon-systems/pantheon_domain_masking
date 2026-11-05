@@ -8,6 +8,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class DomainMaskingConfigForm.
+ *
+ * @phpstan-consistent-constructor
  */
 class Helper {
 
