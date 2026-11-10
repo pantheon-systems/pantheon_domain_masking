@@ -29,6 +29,60 @@ jobs:
       - name: Code lint
         run: composer run-script code:lint
 
+  phpunit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        drupal: ["10", "11", "12"]
+        php-version: ["8.3", "8.5"]
+        exclude:
+          - drupal: "10"
+            php-version: "8.5"
+          - drupal: "12"
+            php-version: "8.3"
+        include:
+          - drupal: "12"
+            stability: beta
+    name: PHPUnit (Drupal ${{ matrix.drupal }}, PHP ${{ matrix.php-version }})
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: module
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@ec406be512d7077f68eed36e63f4d91bc006edc4 # 2.35.4
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: gd, pdo_sqlite
+          coverage: none
+
+      - name: Install Drupal
+        run: |
+          composer create-project "drupal/recommended-project:^${{ matrix.drupal }}" drupal --stability=${{ matrix.stability || 'stable' }} --no-install --no-interaction
+          cd drupal
+          composer config preferred-install.drupal/core source
+          composer require --dev "drupal/core-dev:^${{ matrix.drupal }}" --with-all-dependencies --no-interaction
+          mkdir -p web/modules/contrib
+          cp -R ../module web/modules/contrib/pantheon_domain_masking
+
+      - name: Start web server
+        working-directory: drupal/web
+        run: php -S 127.0.0.1:8888 .ht.router.php > /dev/null 2>&1 &
+
+      - name: Run tests
+        working-directory: drupal
+        env:
+          SIMPLETEST_BASE_URL: http://127.0.0.1:8888
+          SIMPLETEST_DB: sqlite://localhost/${{ github.workspace }}/drupal/test.sqlite
+        run: |
+          # TODO: Remove once a tagged Drupal 12 release includes https://www.drupal.org/i/3634044
+          if [ "${{ matrix.drupal }}" = "12" ]; then
+            export DRUPAL_DEPRECATION_FILTER_CONFIG='{"enableDebugClassLoader":false}'
+          fi
+          vendor/bin/phpunit -c web/core web/modules/contrib/pantheon_domain_masking/tests
+
   phpcompatibility:
     runs-on: ubuntu-latest
     name: PHP Compatibility
